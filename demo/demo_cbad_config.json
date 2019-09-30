@@ -16,9 +16,9 @@
   },
   "pretrained_model_name" : "resnet50",
   "prediction_type": "CLASSIFICATION",
-  "train_data" : "data/cbad-masks/simple/train/train_data.csv",
-  "eval_data" : "data/cbad-masks/simple/train/eval_data.csv",
-  "classes_file" : "data/cbad-masks/simple/train/classes.txt",
-  "model_output_dir" : "demo/cbad_simple_model",
+  "train_data" : "data/cbad-masks/complex/train/train_data.csv",
+  "eval_data" : "data/cbad-masks/complex/train/eval_data.csv",
+  "classes_file" : "data/cbad-masks/complex/train/classes.txt",
+  "model_output_dir" : "demo/cbad_complex_model",
   "gpu" : "0"
 }

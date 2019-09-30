@@ -177,3 +177,21 @@ def extract_lines(npy_filename: str,
     PAGE.save_baselines(xml_filename, contours, ratio, predictions_shape=pred.shape[:2])
 
     return contours, lines_mask
+
+
+def get_original_shape_from_image_file_name(filename):
+    """
+    I think it is a hard code, filename is "../../data/cbad-mask/complex/test/images\\basename.jpg"
+    I want to get image original size from "../../data/cbad-mask/complex/test/gt/basename.xml"
+    :param filename:
+    :return: original h, w of image
+    """
+    # get xml file name
+    base_name = filename.split("\\")[-1].split(".")[0] + ".xml"
+    dir_name = filename.split("\\")[0].replace('images', 'gt')
+    gt_xml_filename = os.path.join(dir_name, base_name)
+    gt_page_xml = PAGE.parse_file(gt_xml_filename)
+
+    original_shape = [gt_page_xml.image_height, gt_page_xml.image_width]
+    return original_shape
+

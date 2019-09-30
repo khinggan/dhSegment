@@ -106,6 +106,7 @@ def cbad_download(output_dir: str):
     with tqdm(unit='B', unit_scale=True, unit_divisor=1024, miniters=1, desc="Downloading cBAD-ICDAR17 dataset") as t:
         urllib.request.urlretrieve('https://zenodo.org/record/1491441/files/READ-ICDAR2017-cBAD-dataset-v4.zip',
                                    zip_filename, reporthook=_progress_hook(t))
+
     print('cBAD-ICDAR2017 dataset downloaded successfully!')
     print('Extracting files ...')
     with zipfile.ZipFile(zip_filename, 'r') as zip_ref:

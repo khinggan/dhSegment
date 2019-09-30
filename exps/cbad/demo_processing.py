@@ -7,10 +7,14 @@ import os
 from typing import List
 from dh_segment.inference import LoadedModel
 from dh_segment.io import PAGE
-from process import line_extraction_v1
+from exps.cbad.process import line_extraction_v1
+from exps.cbad.process import get_original_shape_from_image_file_name
 from imageio import imread, imsave
 from tqdm import tqdm
 import click
+from glob import glob
+config = tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True))
+sess = tf.Session(config=config)
 
 
 @click.command()
@@ -21,8 +25,8 @@ import click
 def baseline_extraction(model_dir: str,
                         filenames_to_process: List[str],
                         output_dir: str,
-                        draw_extractions: bool=False,
-                        config: tf.ConfigProto=None) -> None:
+                        draw_extractions: bool = False,
+                        config: tf.ConfigProto = None) -> None:
     """
     Given a model directory this function will load the model and apply it to the given files.
 
@@ -37,17 +41,20 @@ def baseline_extraction(model_dir: str,
     os.makedirs(output_dir, exist_ok=True)
     if draw_extractions:
         drawing_dir = os.path.join(output_dir, 'drawings')
-        os.makedirs(drawing_dir)
+        os.makedirs(drawing_dir, exist_ok=True)
 
     with tf.Session(config=config):
         # Load the model
         m = LoadedModel(model_dir, predict_mode='filename_original_shape')
-        for filename in tqdm(filenames_to_process, desc='Prediction'):
+        file_name_list = glob('{}'.format(''.join(filenames_to_process)))
+        for filename in tqdm(file_name_list, desc='Prediction'):
             # Inference
             prediction = m.predict(filename)
             # Take the first element of the 'probs' dictionary (batch size = 1)
             probs = prediction['probs'][0]
-            original_shape = probs.shape
+            # get original shape from gt xml file
+            original_shape = get_original_shape_from_image_file_name(filename)
+            # original_shape = probs.shape
 
             # The baselines probs are on the second channel
             baseline_probs = probs[:, :, 1]
@@ -67,6 +74,7 @@ def baseline_extraction(model_dir: str,
 
                 basename = os.path.basename(filename)
                 imsave(os.path.join(drawing_dir, basename), image)
+
 
 if __name__ == '__main__':
     baseline_extraction()

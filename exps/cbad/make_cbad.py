@@ -5,7 +5,7 @@ __license__ = "GPL"
 import os
 import click
 # from utils import cbad_download, cbad_set_generator, split_set_for_eval
-from utils import cbad_set_generator, split_set_for_eval
+from exps.cbad.utils import cbad_set_generator, split_set_for_eval
 from exps.commonutils import cbad_download, CBAD_TRAIN_COMPLEX_FOLDER, CBAD_TEST_COMPLEX_FOLDER, CBAD_TRAIN_SIMPLE_FOLDER, CBAD_TEST_SIMPLE_FOLDER
 
 
